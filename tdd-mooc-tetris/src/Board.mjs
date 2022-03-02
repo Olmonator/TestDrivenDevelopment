@@ -45,21 +45,33 @@ export class Board {
       throw new Error('already falling');
     }
     this.falling = newBlock;
+    //console.log('DROP:\n', this.toString());
   }
 
   hasFalling() {
     return this.falling !== null;
   }
 
+  checkBoundaries() {
+    //console.log(this.board[this.fallingRow][1]);
+    if (this.fallingRow === this.height -1 || this.board[this.fallingRow][1] !== '.') {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   // set an int to signal what row the Block is on
   tick() {
-    
+    //console.log('BEFORE:\n', this.toString());
     // check if Block has reached bottom (height -1)
-    if (this.fallingRow === this.height -1) {
+    if (this.checkBoundaries()) {
       this.board[this.fallingRow][1] = this.falling.getColor();
       this.falling = null;
+      this.fallingRow = 0;
     } else if(this.falling) {
       this.fallingRow ++;
     }
+    //console.log('AFTER:\n', this.toString());
   }
 }
