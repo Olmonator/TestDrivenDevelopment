@@ -14,10 +14,18 @@ export class Board {
     let boardString = ''
     for (let row = 0; row < this.height; row++) {
       for (let col = 0; col < this.width; col++) {
+        if (row === 0 && col === 1 && this.falling) {
+          boardString += 'X';
+        } else {
           boardString += '.';
+        }
       }
       boardString += '\n';
     }
     return boardString;
+  }
+
+  drop() {
+    this.falling = true;
   }
 }
