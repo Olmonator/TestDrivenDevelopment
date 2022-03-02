@@ -54,7 +54,7 @@ export class Board {
 
   checkBoundaries() {
     //console.log(this.board[this.fallingRow][1]);
-    if (this.fallingRow === this.height -1 || this.board[this.fallingRow][1] !== '.') {
+    if (this.fallingRow === this.height -1 || this.board[this.fallingRow +1][1] !== '.') {
       return true;
     } else {
       return false;
