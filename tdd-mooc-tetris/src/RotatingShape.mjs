@@ -16,7 +16,6 @@ export class RotatingShape {
 
   toString() {
     let shapeString = "";
-    //console.log(this.shape);
     for (let row = 0; row < this.shape.length; row++) {
       for (let col = 0; col < this.shape[0].length; col++) {
         shapeString += this.shape[row][col];
@@ -27,13 +26,11 @@ export class RotatingShape {
   }
 
   toArray(shapeString) {
-    
     let rows = shapeString.split("\n");
-    //console.log([...rows[0]]);
+
     for (let row = 0; row < rows.length; row++) {
       this.shape[row] = [...rows[row]];
     }
-    //console.log(this.shape);
   }
 
   createArray(rows) {
@@ -54,18 +51,16 @@ export class RotatingShape {
     for (let row = 0; row < this.shape.length; row++) {
       for (let col = 0; col < this.shape[0].length; col++) {
         rotatedShape[col][(this.shape.length -1) - row] = this.shape[row][col];
-        //console.log(this.shape[row][col])
       }
     }
-    console.log(rotatedShape);
     return new RotatingShape(rotatedShape);
   }
 
   rotateLeft() {
- 
     // attempt number two
     let rotatedShape = this.shape;
     var n=rotatedShape.length;
+    
     for (var i=0; i<n/2; i++) {
       for (var j=i; j<n-i-1; j++) {
           var tmp=this.shape[i][j];
