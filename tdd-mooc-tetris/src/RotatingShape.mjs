@@ -1,7 +1,7 @@
 export class RotatingShape {
   shape = [];
-  row_offset;
-  col_offset;
+  rowOffset;
+  colOffset;
 
   constructor(shapeString, row, col) {
     if (typeof(shapeString) === 'string') {
@@ -10,8 +10,8 @@ export class RotatingShape {
     } else {
       this.shape = shapeString;
     }
-    this.row_offset = row;
-    this.col_offset = col;
+    this.rowOffset = row;
+    this.colOffset = col;
   }
 
   formatString(shapeString) {
@@ -93,13 +93,11 @@ export class RotatingShape {
    * @returns the char of the shape at the given position defined by row and collumn parameters
    */
   cellAt(row, col) {
-    //console.log('RS:', this.row_offset);
-    let innerRow = row - this.row_offset;
-    let innerCol = col - this.col_offset;
+    //console.log('RS:', this.rowOffset);
 
-    if (innerRow >= 0 && innerRow < this.rows() && innerCol >= 0 &&  innerCol < this.collumns()) {
+    if (row >= 0 && row < this.rows() && col >= 0 &&  col < this.collumns()) {
       //console.log('cell: ', this.shape[innerRow][innerCol]);
-      return this.shape[innerRow][innerCol];
+      return this.shape[row][col];
     }
     return '.';
   }
@@ -116,8 +114,8 @@ export class RotatingShape {
           continue;
         }
         // shape has a defined field here, check for collision
-        let rowBoard = rowShape + this.row_offset;
-        let colBoard = colShape + this.col_offset;
+        let rowBoard = rowShape + this.rowOffset;
+        let colBoard = colShape + this.colOffset;
         
         //console.log('RS_collides: [' + rowBoard + '][' + colBoard + '] ' + staticBoard.rows());
         if (!this.isInside(staticBoard, rowBoard, colBoard) || staticBoard.cellAt(rowBoard, colBoard) !== '.') {
@@ -129,6 +127,6 @@ export class RotatingShape {
   }
 
   moveDown() {
-    return new RotatingShape(this.shape, this.row_offset +1, this.col_offset);
+    return new RotatingShape(this.shape, this.rowOffset +1, this.colOffset);
   }
 }

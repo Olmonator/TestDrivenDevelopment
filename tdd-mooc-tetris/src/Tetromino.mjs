@@ -27,7 +27,7 @@ export class Tetromino {
   
   constructor(arg1, arg2) {
     if (typeof(arg2) === 'string') {
-      let shape = new RotatingShape(arg2, 0 , 3);
+      let shape = new RotatingShape(arg2, 0 , 2);
       this.orientations = [];
       for (let index = 0; index < arg1; index ++) {
         this.orientations[index] = shape;

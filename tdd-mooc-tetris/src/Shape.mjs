@@ -23,10 +23,7 @@ export class Shape {
   }
 
   cellAt(row, col) {
-    let innerRow = row - this.rowOffset;
-    let innerCol = col - this.colOffset;
-
-    if (innerRow >= 0 && innerRow < this.rows() && innerCol >= 0 &&  innerCol < this.collumns()) {
+    if (row >= 0 && row < this.rows() && col >= 0 &&  col < this.collumns()) {
       return this.shape;
     }
     return '.';
@@ -49,8 +46,6 @@ export class Shape {
     if (!this.isInside(staticBoard, boardRow, boardCol) || staticBoard.cellAt(boardRow, boardCol) !== '.') {
       return true;
     }
-      
-    
     return false;
   }
 }

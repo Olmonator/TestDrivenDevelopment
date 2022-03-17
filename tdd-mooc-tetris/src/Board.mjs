@@ -1,7 +1,5 @@
-import { Block } from "./Block.mjs";
+import { MovingShape } from "./MovingShape.mjs";
 import { Grid } from "./Grid.mjs";
-import { RotatingShape } from "./RotatingShape.mjs";
-
 
 export class Board{
   width;
@@ -26,7 +24,7 @@ export class Board{
     if (this.falling) {
       throw new Error('already falling');
     }
-    this.falling = newBlock;
+    this.falling = new MovingShape(newBlock, 0, Math.floor((this.width - newBlock.collumns()) / 2));
     //console.log('DROP:\n', this.toString());
   }
 
@@ -41,7 +39,6 @@ export class Board{
       let nextFalling = this.falling.moveDown(); 
       if (nextFalling.collides(this.board)) {
         this.board = this.board.updateBoard(this.toString());
-        
         this.falling = null;
       } else if(this.hasFalling()) {
         this.falling = nextFalling;
@@ -71,5 +68,13 @@ export class Board{
       boardString += '\n';
     }
     return boardString;
+  }
+
+  moveRight() {
+    this.falling = this.falling.moveRight();
+  }
+
+  moveLeft() {
+    this.falling = this.falling.moveLeft();
   }
 }
