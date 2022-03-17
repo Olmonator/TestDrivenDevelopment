@@ -1,41 +1,23 @@
 import { Block } from "./Block.mjs";
+import { Grid } from "./Grid.mjs";
+import { RotatingShape } from "./RotatingShape.mjs";
 
-export class Board {
+
+export class Board{
   width;
   height;
 
   falling = null;
   fallingRow = 0;
 
+  // static Board with already fallen pieces
   board;
 
   constructor(width, height) {
     this.width = width;
     this.height = height;
 
-    this.board = [];
-
-    for (let row = 0; row < this.height; row++) {
-      this.board[row] = []
-      for (let col = 0; col < this.width; col++) {
-        this.board[row][col] = '.';
-      }
-    }
-  }
-
-  toString() {
-    let boardString = ''
-    for (let row = 0; row < this.height; row++) { 
-      for (let col = 0; col < this.width; col++) {
-        if (row === this.fallingRow && col === 1 && this.hasFalling()) {
-          boardString += this.falling.getColor();
-        } else {
-          boardString += this.board[row][col];
-        }
-      }
-      boardString += '\n';
-    }
-    return boardString;
+    this.board = new Grid(width, height);
   }
 
   // set a boolean that is checked to write X to Board
@@ -52,26 +34,42 @@ export class Board {
     return this.falling !== null;
   }
 
-  checkBoundaries() {
-    //console.log(this.board[this.fallingRow][1]);
-    if (this.fallingRow === this.height -1 || this.board[this.fallingRow +1][1] !== '.') {
-      return true;
-    } else {
-      return false;
+  tick() {
+    //console.log('BOARD_tick_BEFORE:\n', this.toString());
+    if (this.hasFalling()) {
+      // check if tick would lead to collision
+      let nextFalling = this.falling.moveDown(); 
+      if (nextFalling.collides(this.board)) {
+        this.board = this.board.updateBoard(this.toString());
+        
+        this.falling = null;
+      } else if(this.hasFalling()) {
+        this.falling = nextFalling;
+      }
     }
+    
+    //console.log('AFTER:\n', this.toString());
   }
 
-  // set an int to signal what row the Block is on
-  tick() {
-    //console.log('BEFORE:\n', this.toString());
-    // check if Block has reached bottom (height -1)
-    if (this.checkBoundaries()) {
-      this.board[this.fallingRow][1] = this.falling.getColor();
-      this.falling = null;
-      this.fallingRow = 0;
-    } else if(this.falling) {
-      this.fallingRow ++;
+  cellAt(row, col) {
+    if(this.hasFalling()) {
+      let cell = this.falling.cellAt(row, col);
+      if (cell && cell !== '.') {
+        return cell;
+      } else 
+        return this.board.cellAt(row, col);
     }
-    //console.log('AFTER:\n', this.toString());
+    return this.board.cellAt(row, col);
+  }
+
+  toString() {
+    let boardString = ''
+    for (let row = 0; row < this.height; row++) { 
+      for (let col = 0; col < this.width; col++) {
+        boardString += this.cellAt(row, col);
+      }
+      boardString += '\n';
+    }
+    return boardString;
   }
 }

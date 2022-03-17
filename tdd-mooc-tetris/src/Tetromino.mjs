@@ -27,25 +27,19 @@ export class Tetromino {
   
   constructor(arg1, arg2) {
     if (typeof(arg2) === 'string') {
-      // call new object
-      console.log(`nOfOrients ${arg1} shape \n${arg2}`);
-      let shape = new RotatingShape(arg2);
+      let shape = new RotatingShape(arg2, 0 , 3);
       this.orientations = [];
       for (let index = 0; index < arg1; index ++) {
         this.orientations[index] = shape;
         shape = shape.rotateRight();
       }
     } else {
-      // call rotated Object
-      //console.log(`curOrient ${arg2[arg1]}`);
       this.orientations = arg2;
       this.currentOrientation = (arg1 + this.orientations.length) % this.orientations.length;
     }
-   
   }
 
   toString() {
-    //console.log(this.orientations[this.currentOrientation]);
     return this.orientations[this.currentOrientation].toString();
   }
 
@@ -55,5 +49,25 @@ export class Tetromino {
 
   rotateLeft() {
     return new Tetromino(this.currentOrientation -1, this.orientations);
+  }
+
+  rows() {
+    return this.orientations[this.currentOrientation].rows();
+  }
+
+  collumns() {
+    return this.orientations[this.currentOrientation].collumns();
+  }
+
+  cellAt(row, col) {
+    return this.orientations[this.currentOrientation].cellAt(row, col);
+  }
+
+  moveDown() {
+    return this.orientations[this.currentOrientation].moveDown();
+  }
+
+  collides(string) {
+    return this.orientations[this.currentOrientation].collides(string);
   }
 }
