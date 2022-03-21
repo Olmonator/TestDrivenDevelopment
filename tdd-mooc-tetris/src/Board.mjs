@@ -11,11 +11,17 @@ export class Board{
   // static Board with already fallen pieces
   board;
 
+  scores = null;
+
   constructor(width, height) {
     this.width = width;
     this.height = height;
 
     this.board = new Grid(width, height);
+  }
+
+  addScoring(scores) {
+    this.scores = scores;
   }
 
   rows() {
@@ -64,7 +70,13 @@ export class Board{
     return this.falling !== null;
   }
 
+  hasScores() {
+    return this.scores !== null;
+  }
+
   clearLine() {
+    let removedRows = 0;
+
     for (let row = 0; row < this.rows(); row ++) {
       let flag = true;
       for (let col = 0; col < this.collumns(); col++) {
@@ -75,8 +87,13 @@ export class Board{
       }
       if (flag) {
         // delete line
+        removedRows ++;
         this.board.clearLine(row);
       }
+    }
+    if (this.hasScores()) {
+      //console.log('BOARD_clearLine:\n', this.scores);
+      this.scores.lineClear(removedRows);
     }
   }
 
@@ -130,6 +147,7 @@ export class Board{
     if (next.collides(this.board)) {
       this.board = this.board.updateBoard(this.toString());
       this.falling = null;
+      this.clearLine();
     } else {
       this.falling = next;
     }

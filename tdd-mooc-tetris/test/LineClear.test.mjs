@@ -173,3 +173,30 @@ describe("Line Clearing", () => {
     );
   });
 });
+describe("Overhangs", () => {
+  let board;
+  beforeEach(() => {
+    board = new Board(5, 5); 
+    
+  });
+  it('when a block has no block underneath it, it drops', () => {
+    board.setBlock(I_SHAPE, 0, 3, 0);
+    
+    board.drop(L_SHAPE);
+    board.rotateRight();
+    board.moveRight();
+    board.moveRight();
+    board.moveDown();
+    board.moveDown();
+    board.moveDown();
+    board.tick();
+
+    expect(board.toString()).to.equalShape(
+      `.....
+       .....
+       .....
+       ....L
+       ...LL`
+    );
+  });
+});      
