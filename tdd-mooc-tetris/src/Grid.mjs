@@ -21,6 +21,9 @@ export class Grid {
   }
 
   cellAt(row, col) {
+    if (row < 0) {
+      return '.';
+    }
     return this.board[row][col];
   }
 
@@ -60,6 +63,46 @@ export class Grid {
     }
 
     //console.log('GRID_updateBoard:\n', this.toString());
+    return this;
+  }
+
+  // can be considered safe because of collision detection
+  setCell(cell, row, col) {
+    this.board[row][col] = cell;
+  }
+
+  // collision occurs if both piece and board have a non empty cell
+  collides(piece, rowOffset, colOffset) {
+    for (let row = 0; row < piece.rows(); row ++) {
+      for (let col = 0; col < piece.collumns(); col ++) {
+        let cell = piece.cellAt(row, col);
+        let boardRow = row + rowOffset;
+        let boardCol = col + colOffset;
+        if (cell !== '.' && this.cellAt(boardRow, boardCol) !== '.') {
+          throw new Error(`Error at position [${boardRow},${boardCol}]: cannot set piece there, collision`);
+        }
+      }
+    }
+    return false;
+  }
+
+  // sets a new block (with corerect orientation) on the board
+  setBoard(piece, rowOffset, colOffset) {
+    if (!this.collides(piece, rowOffset, colOffset)) {
+      for (let row = 0; row < piece.rows(); row ++) {
+        for (let col = 0; col < piece.collumns(); col ++) {
+          let cell = piece.cellAt(row, col);
+          let boardRow = row + rowOffset;
+          let boardCol = col + colOffset;
+          
+          // only override when not an emtpy cell 
+          if (cell !== '.') {
+            this.setCell(cell, boardRow, boardCol);
+          }
+        }
+      }
+    }
+      
     return this;
   }
 }

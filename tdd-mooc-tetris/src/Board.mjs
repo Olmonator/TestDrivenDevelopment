@@ -18,14 +18,38 @@ export class Board{
     this.board = new Grid(width, height);
   }
 
-  // set a boolean that is checked to write X to Board
+  // row and col reference upper right corner of the block
+  setBlock(newBlock, orientation, row, col) {
+    let piece = newBlock.getOrientation(orientation); // Piece
+    this.board.setBoard(piece, row, col);
+
+    console.log('BOARD_setBlock:\n', this.toString());
+  }
+
   drop(newBlock) {
     // check if Block is already falling
-    if (this.falling) {
+    if (this.hasFalling()) {
       throw new Error('already falling');
     }
-    this.falling = new MovingShape(newBlock, 0, Math.floor((this.width - newBlock.collumns()) / 2));
+    let rowOffset = this.calculateRowOffset(newBlock);
+    let colOffset = Math.ceil((this.width - newBlock.collumns()) / 2);
+    this.falling = new MovingShape(newBlock, rowOffset, colOffset);
     //console.log('DROP:\n', this.toString());
+  }
+
+  // different Block have different amounts of whitespace above the block
+  // .... this line needs to be accounted for
+  // .TTT
+  // ..T.
+  // ....
+  calculateRowOffset(newBlock) {
+    for (let row = 0; row < newBlock.rows(); row++) {
+      for (let col = 0; col < newBlock.collumns(); col++) {
+          if (newBlock.cellAt(row, col) !== '.') {
+              return -row;
+          }
+      }
+    }
   }
 
   hasFalling() {
@@ -71,10 +95,60 @@ export class Board{
   }
 
   moveRight() {
-    this.falling = this.falling.moveRight();
+    this.falling = this.checkBounds(this.falling.moveRight());
   }
 
   moveLeft() {
-    this.falling = this.falling.moveLeft();
+    this.falling = this.checkBounds(this.falling.moveLeft());
+  }
+
+  moveDown() {
+    let next = this.falling.moveDown();
+    if (next.collides(this.board)) {
+      this.board = this.board.updateBoard(this.toString());
+      this.falling = null;
+    } else {
+      this.falling = next;
+    }
+  }
+
+  checkBounds(nextPos) {
+    if (!nextPos.collides(this.board)) {
+      return nextPos;
+    } else {
+      return this.falling;
+    }
+  }
+
+  rotateRight() {
+    let nextPos = this.falling.rotateRight();
+    if (nextPos.collides(this.board)) {
+      let kickPos = nextPos.moveLeft();
+      if (!kickPos.collides(this.board)) {
+        this.falling = kickPos;
+      }
+      kickPos = nextPos.moveRight();
+      if (!kickPos.collides(this.board)) {
+        this.falling = kickPos;
+      }
+    } else {
+      this.falling = nextPos;
+    }
+  }
+  
+  rotateLeft() {
+    let nextPos = this.falling.rotateLeft();
+    if (nextPos.collides(this.board)) {
+      let kickPos = nextPos.moveLeft();
+      if (!kickPos.collides(this.board)) {
+        this.falling = kickPos;
+      }
+      kickPos = nextPos.moveRight();
+      if (!kickPos.collides(this.board)) {
+        this.falling = kickPos;
+      }
+    } else {
+      this.falling = nextPos;
+    }
   }
 }

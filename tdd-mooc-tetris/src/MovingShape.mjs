@@ -35,11 +35,20 @@ export class MovingShape {
     return new MovingShape(this.shape, this.rowOffset, this.colOffset -1);
   }
 
+  rotateRight() {
+    return new MovingShape(this.shape.rotateRight(), this.rowOffset, this.colOffset);
+  }
+
+  rotateLeft() {
+    return new MovingShape(this.shape.rotateLeft(), this.rowOffset, this.colOffset);
+  }
+
   isInside(grid, row, col) {
-    return row >= 0 && row < grid.rows() && col >= 0 && col < grid.collumns();
+    return row >= -1 && row < grid.rows() && col >= 0 && col < grid.collumns();
   }
 
   collides(staticBoard) {
+    //console.log('MSHAPE_collides:\n', this.shape);
     for (let rowShape = 0; rowShape < this.rows(); rowShape ++) {
       for (let colShape = 0; colShape < this.collumns(); colShape ++) {
         // shape has EMPTY field here, no collision can occur
