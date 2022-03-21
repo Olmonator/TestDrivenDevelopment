@@ -18,12 +18,20 @@ export class Board{
     this.board = new Grid(width, height);
   }
 
+  rows() {
+    return this.height;
+  }
+
+  collumns() {
+    return this.width;
+  }
+
   // row and col reference upper right corner of the block
   setBlock(newBlock, orientation, row, col) {
     let piece = newBlock.getOrientation(orientation); // Piece
     this.board.setBoard(piece, row, col);
 
-    console.log('BOARD_setBlock:\n', this.toString());
+    //console.log('BOARD_setBlock:\n', this.toString());
   }
 
   drop(newBlock) {
@@ -56,20 +64,35 @@ export class Board{
     return this.falling !== null;
   }
 
+  clearLine() {
+    for (let row = 0; row < this.rows(); row ++) {
+      let flag = true;
+      for (let col = 0; col < this.collumns(); col++) {
+        // check if line has empty
+        if (this.cellAt(row, col) === '.') {
+          flag = false;
+        }
+      }
+      if (flag) {
+        // delete line
+        this.board.clearLine(row);
+      }
+    }
+  }
+
   tick() {
-    //console.log('BOARD_tick_BEFORE:\n', this.toString());
     if (this.hasFalling()) {
-      // check if tick would lead to collision
+      // move piece down and check for collision
       let nextFalling = this.falling.moveDown(); 
       if (nextFalling.collides(this.board)) {
         this.board = this.board.updateBoard(this.toString());
         this.falling = null;
+        // check for line clear
+        this.clearLine();
       } else if(this.hasFalling()) {
         this.falling = nextFalling;
       }
     }
-    
-    //console.log('AFTER:\n', this.toString());
   }
 
   cellAt(row, col) {

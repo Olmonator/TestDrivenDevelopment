@@ -79,7 +79,7 @@ export class Grid {
         let boardRow = row + rowOffset;
         let boardCol = col + colOffset;
         if (cell !== '.' && this.cellAt(boardRow, boardCol) !== '.') {
-          throw new Error(`Error at position [${boardRow},${boardCol}]: cannot set piece there, collision`);
+          throw new Error(`Error at position [${boardRow},${boardCol}]: cannot set piece there, collision \n ${this.toString()}`);
         }
       }
     }
@@ -104,5 +104,17 @@ export class Grid {
     }
       
     return this;
+  }
+
+  clearLine(row) {
+    for (let boardRow = row; boardRow >= 0; boardRow --) {
+      for (let col = 0; col < this.collumns(); col ++) {
+        let cell = '.';
+        if (boardRow > 0) {
+          cell = this.cellAt(boardRow -1, col);
+        }
+        this.setCell(cell, boardRow, col);
+      }
+    }
   }
 }
