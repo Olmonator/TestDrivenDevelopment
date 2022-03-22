@@ -106,23 +106,11 @@ export class Grid {
     return this;
   }
 
-  // if a block is not supported, it drops
-  blockFall(cell, row, col) {
-    if (row +1 >= this.rows() || this.cellAt(row +1, col) !== '.') {
-      this.setCell(cell, row, col);
-    } else 
-    this.blockFall(cell, row +1, col);
-  }
-
   clearLine(row) {
     for (let boardRow = row; boardRow >= 0; boardRow --) {
       for (let col = 0; col < this.collumns(); col ++) {
         if (boardRow > 0) {
-          if (this.cellAt(boardRow -1, col) !== '.') {
-            this.blockFall(this.cellAt(boardRow -1, col), boardRow, col);
-          } else {
-            this.setCell('.', boardRow, col);
-          }
+          this.setCell(this.cellAt(boardRow -1, col), boardRow, col);
         } else {
           this.setCell('.', boardRow, col);
         } 

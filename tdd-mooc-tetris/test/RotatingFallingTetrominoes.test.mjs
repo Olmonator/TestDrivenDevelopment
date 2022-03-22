@@ -318,8 +318,6 @@ describe("collision with only I shape", () => {
        ..IIII.`
     );
   });
-
-  // todo: no wall kicking for I shape
 });
 
 describe("collision with other Tetrominoes when rotating", () => {

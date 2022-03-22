@@ -1,5 +1,4 @@
 import { expect } from "chai";
-import { Tetromino } from "../src/Tetromino.mjs";
 import { RotatingPiece } from "../src/RotatingPiece.mjs";
 
 const T_SHAPE = new RotatingPiece(
@@ -181,8 +180,6 @@ describe("The I shape", () => {
   });
 });
 
-
-
 describe("The O shape", () => {
   const shape = O_SHAPE;
 
@@ -212,5 +209,126 @@ describe("The O shape", () => {
   });
 });
 
+describe("The L shape", () => {
+  const shape = L_SHAPE;
+  it("initial orientation", () => {
+    expect(shape.toString()).to.equalShape(
+      `....
+       LLL.
+       L...`
+    );
+  });
 
-// todo: new shapes
+  it("can be rotated right/clockwise", () => {
+    expect(shape.rotateRight().toString()).to.equalShape(
+      `LL..
+       .L..
+       .L..`
+    );
+  });
+ 
+  it("can be rotated left/counter-clockwise", () => {
+    expect(shape.rotateLeft().toString()).to.equalShape(
+      `.L..
+       .L..
+       .LL.`
+    );
+  });
+
+  it("has 4 distinct orientations", () => {
+    expect(distinctOrientations(shape).size).to.equal(4);
+  });
+});
+
+describe("The J shape", () => {
+  const shape = J_SHAPE;
+  it("initial orientation", () => {
+    expect(shape.toString()).to.equalShape(
+      `....
+       JJJ.
+       ..J.`
+    );
+  });
+
+  it("can be rotated right/clockwise", () => {
+    expect(shape.rotateRight().toString()).to.equalShape(
+      `.J..
+       .J..
+       JJ..`
+    );
+  });
+ 
+  it("can be rotated left/counter-clockwise", () => {
+    expect(shape.rotateLeft().toString()).to.equalShape(
+      `.JJ.
+       .J..
+       .J..`
+    );
+  });
+
+  it("has 4 distinct orientations", () => {
+    expect(distinctOrientations(shape).size).to.equal(4);
+  });
+});
+
+describe("The S shape", () => {
+  const shape = S_SHAPE;
+
+  it("initial orientation", () => {
+    expect(shape.toString()).to.equalShape(
+      `....
+       .SS.
+       SS..`
+    );
+  });
+
+  it("can be rotated right/clockwise", () => {
+    expect(shape.rotateRight().toString()).to.equalShape(
+      `S...
+       SS..
+       .S..`
+    );
+  });
+
+  it("can be rotated left/counter-clockwise", () => {
+    expect(shape.rotateLeft().toString()).to.equalShape(
+      `S...
+       SS..
+       .S..`
+    );
+  });
+
+  it("has 2 distinct orientations", () => {
+    expect(distinctOrientations(shape).size).to.equal(2);
+  });
+});
+
+describe("The Z shape", () => {
+  const shape = Z_SHAPE;
+
+  it("initial orientation", () => {
+    expect(shape.toString()).to.equalShape(
+      `....
+       ZZ..
+       .ZZ.`
+    );
+  });
+
+  it("can be rotated right/clockwise", () => {
+    expect(shape.rotateRight().toString()).to.equalShape(
+      `..Z.  
+       .ZZ.
+       .Z..`
+    );
+  });
+
+  expect(shape.rotateRight().toString()).to.equalShape(
+    `..Z.  
+     .ZZ.
+     .Z..`
+  );
+
+  it("has 2 distinct orientations", () => {
+    expect(distinctOrientations(shape).size).to.equal(2);
+  });
+});
