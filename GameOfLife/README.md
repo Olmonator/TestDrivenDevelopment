@@ -1,23 +1,6 @@
-# New JavaScript Project
+# GameOfLife
 
-An empty project with JavaScript testing tools preconfigured. Do whatever you like with it.
+Implementation by Olmo Lecht
 
-## Prerequisites
 
-You'll need a recent [Node.js](https://nodejs.org/) version. Then download this project's dependencies with:
-
-    npm install
-
-## Developing
-
-Run tests once
-
-    npm run test
-
-Run tests continuously
-
-    npm run autotest
-
-Code reformat
-
-    npm run format
+[Part 1](https://youtu.be/5hDKcnhBsoM)
