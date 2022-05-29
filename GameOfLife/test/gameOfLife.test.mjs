@@ -30,21 +30,3 @@ describe("Read RLE Files", () => {
     });
   });
 });
-
-describe("Game Logic", () => {
-  describe("Blinker", ()  => {
-    it("1 iteration", () => {
-      expect(arrToString(iterate("src/testFiles/blinker.rle", 1))).to.equal("bbbbb\nbbobb\nbbobb\nbbobb\nbbbbb\n");
-    });
-  });
-  describe("Block", ()  => {
-    it("1 iteration", () => {
-      expect(arrToString(iterate("src/testFiles/block.rle", 1))).to.equal("bbbb\nboob\nboob\nbbbb\n");
-    });
-  });
-  describe("Glider", ()  => {
-    it("1 iteration", () => {
-      expect(arrToString(iterate("src/testFiles/glider.rle", 1))).to.equal("bbbbb\nbbbbb\nbobob\nbboob\nbbobb\n");
-    });
-  });
-});
