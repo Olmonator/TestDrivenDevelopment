@@ -1,5 +1,5 @@
 import { create } from 'domain';
-import { readFileSync } from 'fs';
+import { readFileSync, unwatchFile } from 'fs';
 
 export function readFile(fileName) {
   try {
@@ -27,7 +27,7 @@ function createArray(x, y) {
 }
 
 function patternToArray(arr, pattern, x, y) {
-  console.log("current pattern: ", pattern);
+  //console.log("current pattern: ", pattern);
 
   // variables for traversing arr
   let indx = 0;
@@ -78,7 +78,7 @@ function patternToArray(arr, pattern, x, y) {
 
 // simple 2D array to String method
 // exeption for 1D arr
-function arrToString(arr) {
+export function arrToString(arr) {
   let string = "";
 
   for(let x = 0; x < arr.length; x++) {
@@ -132,6 +132,100 @@ export function readRLE(fileName) {
 
   let arr = createArray(x, y);
 
-  return arrToString(patternToArray(arr, pattern, x, y));
+  return patternToArray(arr, pattern, x, y);
+}
+
+function check(arr, x, y, xmax, ymax) {
+  if(x >= 0 && x < xmax && y >= 0 && y < ymax) {
+    if (arr[x][y] === 'o') {
+      return true;
+    }
+  } 
+  return false;
+}
+
+function getNeighbors(arr, x, y, xmax, ymax) {
+  let nOfAlive = 0;
+  //console.log("flag", arr);
+  for (let xOff = -1; xOff < 2; xOff++) {
+    for(let yOff = -1; yOff < 2; yOff++) {
+      
+      if(xOff !== 0 || yOff !== 0) {
+        if(check(arr, x + xOff, y + yOff, xmax, ymax)) {
+          nOfAlive++;
+        }
+      }
+    }
+  }
+  console.log("alive: [" + x + "," + y + "] " + arr[x][y] + " " + nOfAlive);
+  return nOfAlive;
+}
+
+// surounds the array with a padding
+// oo   bbbb
+// oo   boob
+//      boob
+//      bbbb
+function extendArr(arr) {
+  let matrix = arr;
+  const offset = arr.length - arr[0].length;
+  let extArr = createArray(arr.length, arr.length);
+  console.log("matrix: ", matrix);
+  // turn 1D into 2D
+  if(arr[0].length === 1) {
+    for(let x = 0; x < extArr.length; x++) {
+      for(let y = 0; y < extArr.length; y++) {
+        if(x === 1) {
+          extArr[x][y] = arr[x];
+        } else {
+          extArr[x][y] = 'b';
+        }
+      }
+    }
+    //console.log("1D conversion", extArr);
+    matrix = extArr;
+  }
   
+  extArr = createArray(matrix.length +2, matrix[0].length);
+
+  for(let x = 0; x < extArr.length; x++) {
+    for(let y = 0; y < extArr.length; y++) {
+      extArr[x][y] = 'b';
+    }
+  }
+    
+  for(let x = 1; x < extArr.length -1; x++) {
+    for(let y = 1; y < extArr[0].length -1; y++) {
+      //console.log("element: ", matrix[x]);
+      if (matrix[x-1][y-1] !== undefined) {
+        extArr[x][y] = matrix[x-1][y-1];
+      }
+    }
+  }
+
+  return extArr;
+}
+
+export function iterate(fileName, iterations) {
+  let arr = readRLE(fileName);
+  arr = extendArr(arr);
+  let resultArr = createArray(arr.length, arr.length);
+
+  console.log("arr: ", arr);
+
+  for (let i = 0; i < iterations; i++) {
+    for(let x  = 0; x < arr.length; x++) {
+      for(let y = 0; y < arr[0].length; y++) {
+        let neighbors = getNeighbors(arr, x, y, arr.length, arr[0].length);
+        if((neighbors === 2 || neighbors === 3) && arr[x][y] === 'o') {
+          resultArr[x][y] = 'o';
+        } else if(neighbors === 3 && arr[x][y] === 'b') {
+          resultArr[x][y] = 'o';
+        } else {
+          resultArr[x][y] = 'b';
+        }
+      }
+    }
+  }
+  return resultArr;
 }

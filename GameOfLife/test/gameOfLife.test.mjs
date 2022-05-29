@@ -1,5 +1,5 @@
 import { expect } from "chai";
-import { readFile, readRLE } from "../src/gameOfLife.mjs";
+import { readFile, readRLE, arrToString, iterate } from "../src/gameOfLife.mjs";
 
 describe("Read RLE Files", () => {
   it("Read Files", () => {
@@ -20,13 +20,31 @@ describe("Read RLE Files", () => {
 
   describe("Read RLE format" , () => {
     it("Read Blinker", () => {
-      expect(readRLE("src/testFiles/blinker.rle")).to.equal("ooo");
+      expect(arrToString(readRLE("src/testFiles/blinker.rle"))).to.equal("ooo");
     });
     it("Read Block", () => {
-      expect(readRLE("src/testFiles/block.rle")).to.equal("oo\noo\n");
+      expect(arrToString(readRLE("src/testFiles/block.rle"))).to.equal("oo\noo\n");
     });
     it("Read Glider", () => {
-      expect(readRLE("src/testFiles/glider.rle")).to.equal("bob\nbbo\nooo\n");
+      expect(arrToString(readRLE("src/testFiles/glider.rle"))).to.equal("bob\nbbo\nooo\n");
     });
-  })
+  });
+});
+
+describe("Game Logic", () => {
+  describe("Blinker", ()  => {
+    it("1 iteration", () => {
+      expect(arrToString(iterate("src/testFiles/blinker.rle", 1))).to.equal("bbbbb\nbbobb\nbbobb\nbbobb\nbbbbb\n");
+    });
+  });
+  describe("Block", ()  => {
+    it("1 iteration", () => {
+      expect(arrToString(iterate("src/testFiles/block.rle", 1))).to.equal("bbbb\nboob\nboob\nbbbb\n");
+    });
+  });
+  describe("Glider", ()  => {
+    it("1 iteration", () => {
+      expect(arrToString(iterate("src/testFiles/glider.rle", 1))).to.equal("bbbbb\nbbbbb\nbobob\nbboob\nbbobb\n");
+    });
+  });
 });
