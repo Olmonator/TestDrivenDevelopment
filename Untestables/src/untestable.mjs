@@ -19,3 +19,7 @@ export function readClock(date) {
 
   return time.getDate() + 1;
 }
+
+export function randomNumber(max) {
+  return Math.floor(Math.random() * max);
+}
