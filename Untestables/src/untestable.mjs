@@ -33,3 +33,13 @@ function callNumber() {
 export function getNumber(number) {
   return number -1;
 }
+
+export function everything(fileName, date) {
+  let max = parseInt(readFile(fileName));
+  if(Number.isNaN(max)) {
+    return "Error";
+  }
+  let day = readClock(date);
+  let randomInt = randomNumber(max);
+  return getNumber(day + randomInt);
+}

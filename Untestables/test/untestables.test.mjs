@@ -1,14 +1,14 @@
 import { expect } from "chai";
-import { readClock, readFile, randomNumber, getNumber } from "../src/untestable.mjs";
+import { readClock, readFile, randomNumber, getNumber, everything } from "../src/untestable.mjs";
 import { writeFileSync } from "fs";
 
 describe("Filesystem Test", () => {
-  xit("Read Files", () => {
+  it("Read Files", () => {
     let data = "Line1\nLine2";
     writeFileSync("src/testFile.txt", data);
     expect(readFile("src/testFile.txt")).to.equal("Line1\nLine2");
   });
-  xit("Read Files failes", () => {
+  it("Read Files failes", () => {
     let data = "Line1\nLine2";
     writeFileSync("src/testFiles/testFile.txt", data);
     expect(readFile("src/testFiles/testFile1.txt")).to.equal(false);
@@ -16,7 +16,7 @@ describe("Filesystem Test", () => {
 });
 
 describe("Time Test", () => {
-  xit("Read the clock", () => {
+  it("Read the clock", () => {
     let date = '2000-01-01T03:24:00';
     expect(readClock(date)).to.equal(2);
   });
@@ -33,7 +33,7 @@ function randomNumbers(max) {
 describe("Randomness Test", () => {
   let max = 10;
   let numbers;
-  xit("Uniqueness Test", () => {
+  it("Uniqueness Test", () => {
     let array;
     let set = new Set();
     let arr = [];
@@ -51,12 +51,12 @@ describe("Randomness Test", () => {
     numbers = randomNumbers(max);
     //console.log("numbers: ", numbers);
   });
-  xit("Every Number Test", () => {
+  it("Every Number Test", () => {
     for(let i = 0; i < max; i++) {
-      expect(numbers).to.contain(i)
+      expect(numbers).to.contain(i);
     }
   });
-  xit("Range Test", () => {
+  it("Range Test", () => {
     numbers.forEach(number => {
       expect(number).to.be.at.least(0);
       expect(number).to.be.at.most(9);
@@ -69,4 +69,35 @@ describe("Globals Test", () => {
   it("get a number", () => {
     expect(getNumber(10)).to.equal(9);
   })
+});
+
+describe("all together", () => {
+  it("Everything, Everywhere, All at once - Range", () => {
+    let date = '2000-01-01T03:24:00';
+    writeFileSync("src/testFiles/testFileAll.txt", "10");
+    let numbers = [];
+    for (let i = 0; i < 100; i++) {
+      numbers.push(everything("src/testFiles/testFileAll.txt", date));
+    }
+    numbers.forEach(number => {
+      expect(number).to.be.at.least(1);
+      expect(number).to.be.at.most(10);
+    });
+  });
+  it("Everything, Everywhere, All at once - Instances", () => {
+    let date = '2000-01-01T03:24:00';
+    writeFileSync("src/testFiles/testFileAll.txt", "10");
+    let numbers = new Set();
+    for (let i = 0; i < 100; i++) {
+      numbers.add(everything("src/testFiles/testFileAll.txt", date));
+    }
+    console.log(numbers);
+    for(let i = 1; i < 11; i ++) {
+      expect(numbers).to.contain(i);
+    }
+  });
+  it("Failure, max is no Int", () => {
+    writeFileSync("src/testFiles/testFileAll.txt", "maximum");
+    expect(everything("src/testFiles/testFileAll.txt")).to.equal("Error");
+  });
 });
