@@ -1,4 +1,4 @@
-import { readFileSync, writeFileSync } from 'fs';
+import { readFileSync, unwatchFile, writeFileSync } from 'fs';
 
 export function readFile(fileName) {
   try {
@@ -7,4 +7,15 @@ export function readFile(fileName) {
   } catch (err) {
     return false;
   }
+}
+
+export function readClock(date) {
+  let time;
+  if(date === undefined) {
+    time = Date;
+  } else {
+    time = new Date(date);
+  }
+
+  return time.getDate() + 1;
 }
