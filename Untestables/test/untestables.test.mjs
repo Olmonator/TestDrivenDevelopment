@@ -1,7 +1,6 @@
 import { expect } from "chai";
-import { readClock, readFile, randomNumber } from "../src/untestable.mjs";
+import { readClock, readFile, randomNumber, getNumber } from "../src/untestable.mjs";
 import { writeFileSync } from "fs";
-import exp from "constants";
 
 describe("Filesystem Test", () => {
   xit("Read Files", () => {
@@ -17,7 +16,7 @@ describe("Filesystem Test", () => {
 });
 
 describe("Time Test", () => {
-  it("Read the clock", () => {
+  xit("Read the clock", () => {
     let date = '2000-01-01T03:24:00';
     expect(readClock(date)).to.equal(2);
   });
@@ -34,7 +33,7 @@ function randomNumbers(max) {
 describe("Randomness Test", () => {
   let max = 10;
   let numbers;
-  it("Uniqueness Test", () => {
+  xit("Uniqueness Test", () => {
     let array;
     let set = new Set();
     let arr = [];
@@ -50,19 +49,24 @@ describe("Randomness Test", () => {
   });
   beforeEach(() => {
     numbers = randomNumbers(max);
-  });
-  it("Every Number Test", () => {
-    
     //console.log("numbers: ", numbers);
+  });
+  xit("Every Number Test", () => {
     for(let i = 0; i < max; i++) {
       expect(numbers).to.contain(i)
     }
   });
-  it("Range Test", () => {
+  xit("Range Test", () => {
     numbers.forEach(number => {
       expect(number).to.be.at.least(0);
       expect(number).to.be.at.most(9);
     });
   });
 });
- 
+
+describe("Globals Test", () => {
+  // because global can be changed by time, test only the getNumber() method
+  it("get a number", () => {
+    expect(getNumber(10)).to.equal(9);
+  })
+});

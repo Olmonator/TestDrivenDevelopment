@@ -1,4 +1,6 @@
-import { readFileSync, unwatchFile, writeFileSync } from 'fs';
+import { readFileSync } from 'fs';
+
+let globalInt = 5;
 
 export function readFile(fileName) {
   try {
@@ -16,10 +18,18 @@ export function readClock(date) {
   } else {
     time = new Date(date);
   }
-
+  globalInt = time.getDate();
   return time.getDate() + 1;
 }
 
 export function randomNumber(max) {
   return Math.floor(Math.random() * max);
+}
+
+function callNumber() {
+  return getNumber(globalInt)
+}
+
+export function getNumber(number) {
+  return number -1;
 }
